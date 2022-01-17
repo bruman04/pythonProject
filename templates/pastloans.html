@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+{% block title %}RentPlatter - Past Loans{% endblock %}
+
+{% block content %}
+<div id = "mainbody">
+<h1 class="display-4">RentPlatter</h1>
+<hr>
+<p> Past Loans </p>
+<div>
+
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Loan Start</th>
+        <th>Loan End</th>
+        <th>Customer</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for loan in previous_loans_list %}
+      <tr>
+        <td>{{ loan.get_item_name() }}</td>
+        <td>{{ loan.get_start_date() }}</td>
+        <td>{{ loan.get_end_date() }}</td>
+        <td>{{ loan.get_customer_name() }}</td>
+         <td>
+        <form action="{{url_for('move_to_current', id=loan.get_id())}}" method="POST">
+        <input type="submit" value="yes" class="btn btn-danger" onclick="return confirm('Are you sure you want to move this loan?')">
+        </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+  </div>
+{% endblock %}

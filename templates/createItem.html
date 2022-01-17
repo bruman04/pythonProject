@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Create Item{% endblock %}
+
+{% block content %}
+{% from "includes/formHelper.html" import render_field %}
+
+<h1 class="display-4" id = page_top>RentPlatter</h1>
+<hr>
+<p id = page_top> Add New Listing </p>
+
+<form method="POST" action="", enctype="multipart/form-data">
+  <div class="form-group">
+    {{ render_field(form.image, class="form-control") }}
+  </div>
+
+    <div class="form-group">
+    {{ render_field(form.name, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.description, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.rate, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.on_loan, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.available, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.location, class="form-control") }}
+  </div>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+{% endblock %}
