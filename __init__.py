@@ -21,8 +21,13 @@ def listingpage():
 
     items_dict = {}
     db = shelve.open('items.db', 'c')
-    items_dict = db['Items']
 
+    try:
+        items_dict = db['Items']
+
+    except IndexError:
+        print("Error in retrieving items")
+        
     db.close()
 
     items_list = []
@@ -58,8 +63,10 @@ def update_item(id):
     update_item_form = CreateItemForm(request.form)
     if request.method =='POST' and update_item_form.validate():
         items_dict = {}
+
         db = shelve.open('items.db', 'w')
         items_dict = db["Items"]
+
 
 
 
@@ -110,7 +117,11 @@ def delete_item(id):
 
     items_dict = {}
     db = shelve.open('items.db', 'w')
-    items_dict = db['Items']
+    try:
+        items_dict = db['Items']
+
+    except IndexError:
+        print("Error in retreiving items")
 
     #delete image from static
     os.remove(f'static/images/{id}.png')
@@ -189,7 +200,7 @@ def create_loan():
 
         try:
             future_loans_dict = db['PreviousLoans']
-        except:
+        except IndexError:
             print("Error in retrieving items")
 
     #get information entered into form
