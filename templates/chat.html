@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+<!--Done by Ng Rong Kai:-->
+
+{% block title %}
+{% if asVendor %}Customer{% else %}Vendor{% endif %} {{ you }} Chat:
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/_navbar.css') }}">
+{% endblock %}
+
+{% block content %}
+<a href="/{{ 'vendor' if asVendor else 'customer' }}/chats/{{ me }}" class="btn btn-outline-dark btn-lg"
+   style="border-radius: 16px; display: inline; float: left;">Back</a>
+<h1 class="display-4" style="margin: 0 auto; text-align: center;">{% if asVendor %}Customer{% else %}Vendor{% endif %}
+    {{ you }} Chat:</h1>
+
+<div style="height: auto; width: 100%; justify-content: center;">
+    <div class="container overflow-auto"
+         style="border-radius: 16px; height: 60vh; overflow-y: scroll; overflow-x: hidden; display: flex; flex-direction: column-reverse;">
+        {% for message in chat %}
+        <div class="container bg-{% if message.id() == me %}success{% else %}primary{% endif %}">
+            <img src="/avatars/{{ message.id() }}.png" alt="Avatar"
+                 onerror="this.src = '{{ url_for('static', filename='pics/defaultAvatar.jpg') }}';">
+            <p><b style="font-size: 16pt;">
+                {% if message.id() == me %}
+                {% if asVendor %}Vendor{% else %}Customer{% endif %}
+                {% else %}
+                {% if asVendor %}Customer{% else %}Vendor{% endif %}
+                {% endif %} @{{ message.id() }}:
+            </b></p>
+            {% if message.id() == me %}
+            <form class="bg-success" name="msg" method="POST" action="edit" onsubmit="this.submit();return false;"
+                  id="chatMsg{{ message.index }}"
+                  style="border-radius: 16px; width: 95%; height: auto; overflow-x: hidden; float: right; display: inline;">
+            <textarea oninput="this.style.height=this.scrollHeight+'px';" onfocus="this.oninput();"
+                      onmouseover="this.oninput();" onwheel="this.oninput();" onload="this.oninput();" name="msg"
+                      autocomplete="off" form="msg{{ message.index }}" class="bg-success" id="msg{{ message.index }}"
+                      draggable="false" placeholder="{{ message.msg() }}"
+                      style="color: white; border-radius: 16px; float: right; resize: none; height: auto; width: 100%; white-space: pre-line; border: 0; overflow-y: hidden; font-size: 14pt; display: inline;">{{ message.msg() }}</textarea>
+                <button type="button" class="btn btn-danger btn-sm" value="Delete" data-bs-toggle="modal"
+                        data-bs-target="#myModal_{{ message.index }}" style="float: right; display: inline;">
+                    Delete
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" value="Edit" id="edit-msg{{ message.index }}"
+                        style="float: right; display: inline;">
+                    Edit
+                </button>
+                <div class="modal" id="myModal_{{ message.index }}" data-bs-backdrop="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Message Delete Confirmation</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to Delete Your Message?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" value="Delete"
+                                        id="delete-msg{{ message.index }}" onsubmit="return false;">Delete
+                                </button>
+                                <button type="button" class="btn btn-secondary" value="Cancel"
+                                        data-bs-dismiss="modal">Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <p style="color: white; white-space: pre-line; font-size: 14pt;" class="white-text" id="white-text">
+                {{ message.msg() }}
+            </p>
+            {% endif %}
+            <p><b id="edited{{ message.index }}" style="font-size: 14pt; display: inline;">
+                {% if message.isEdited() %}(Edited){% endif %}</b></p>
+            <span class="time-right"
+                  style="font-size: 14pt; display: inline; float: right;">{{ message.timeFormat() }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    <form name="chat" method="POST" action="" id="chat"
+          style="border-radius: 16px; position: absolute; bottom: 0; width: 95%; height: auto; margin-left: 25vh; margin-right: 25vh; overflow-x: hidden;">
+        <table class="table table-lg" style="border-radius: 16px; width: 100%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <td>
+                    <textarea name="text" autocomplete="off" required form="chat" class="form-control" id="text"
+                              autofocus draggable="false"
+                              style="border-radius: 16px; resize: none; height: 100px; width: 100%; font-size: 14pt;"
+                              placeholder="Message {% if asVendor %}Customer{% else %}Vendor{% endif %} @{{ you }} ..."></textarea>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary" value="Send"
+                            style="border-radius: 16px; margin-top: 25px; height: 50px; width: auto; font-size: 14pt; text-align: center;">
+                        Send
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

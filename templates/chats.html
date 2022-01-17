@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}View All Conversations:{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/_navbar.css') }}">
+{% endblock %}
+
+{% block content %}
+<!--Done by Ng Rong Kai:-->
+
+<div>
+
+    <h1 class="display-4">View All {% if asVendor %}Customer{% else %}Vendor{% endif %} Conversations:</h1>
+
+    {% if count <= 0 %}
+    <p>There are no conversations.</p>
+    {% elif count == 1 %}
+    <p>There is a conversation.</p>
+    {% else %}
+    <p>There are {{ count }} conversations.</p>
+    {% endif %}
+</div>
+
+<div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+
+            <th>{{ 'Customers' if asVendor else 'Vendors' }}' Names:</th>
+            <th>Last Message:</th>
+            <th>Unread Messages:</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for chat in chats_list %}
+        <tr>
+            <td>{{ chat[0] }}</td>
+            <td>{{ chat[1].id() }}{{ ': ' if chat[1].id() else '-' }}{{ chat[1].msg() }}</td>
+            <td>{{ chat[2] }}</td>
+            <td><a href="/{{ 'vendor' if asVendor else 'customer' }}/chats/{{ me }}/{{ chat[0] }}" class="btn btn-info">
+                Chat</a></td>
+            <td>
+                <form action="{{ url_for('delete_chat', TYPE=('vendor' if asVendor else 'customer'), MY_ID=me, YOUR_ID=chat[0]) }}"
+                      method="POST">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#myModal_{{ chat[0] }}">
+                        Delete
+                    </button>
+                    <div class="modal" id="myModal_{{ chat[0] }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Chat Delete Confirmation</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to Delete Chat with {{ 'Customer' if asVendor else 'Vendor' }}
+                                    @{{ chat[0] }} ?
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
