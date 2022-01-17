@@ -31,7 +31,7 @@ def listingpage():
         items_list.append(item)
 
     return render_template('listingpage.html', items_list=items_list)
-
+#test
 # view full specs of item
 @app.route('/detailedview/<int:id>')
 def detailed_view(id):
