@@ -14,3 +14,5 @@ class CreateLoanForm(Form):
     start_date = DateField('Start Date', format='%Y-%m-%d')
     end_date = DateField('End Date', format='%Y-%m-%d')
     customer_name = StringField('Customer Name', [validators.Length(min = 1, max = 150), validators.DataRequired()])
+
+    #hello test
