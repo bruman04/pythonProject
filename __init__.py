@@ -2,10 +2,11 @@ import os
 import shelve
 
 from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.datastructures import ImmutableMultiDict
 
 import Item
 import Loan
-from Chat import *
+from Review import *
 
 # Ensure WTForms is v2.3.3 (Otherwise it won't work)
 try:
@@ -41,6 +42,25 @@ def listingpage():
         items_list.append(item)
 
     return render_template('listingpage.html', items_list=items_list)
+
+
+# Done by Ng Rong Kai:
+
+@app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews", methods=["GET", "POST"])
+def review(USER: str, VENDOR: str, PRODUCT: str):
+    FEEDBACK: Feedback = Feedback(PRODUCT.strip(), VENDOR.strip())
+    if request.method == "POST":
+        f: ImmutableMultiDict[str, str] = request.form
+        try:
+            if not FEEDBACK.appendFeedbackReview(USER.strip(), str(f["text"]).strip(), int(f["stars"])):
+                raise ValueError("Failed to FEEDBACK.appendFeedbackReview() ! (Missing or Invalid Parameter(s).)")
+        except Exception as EE:
+            return "Error handling review post:\n" + str(EE), 403
+    r: list[Review] = FEEDBACK.getFeedback()
+    for i in range(len(r)):
+        r[i].index = i
+    r.reverse()
+    return render_template("review.html", me=USER.strip(), review=r)
 
 
 # test
