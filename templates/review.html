@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+<!--Done by Ng Rong Kai:-->
+
+{% block title %}
+{{ product }} Product Reviews by {{ you }}:
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/_navbar.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<a href="/{{ me }}/{{ you }}/{{ product }}" class="btn btn-outline-dark btn-lg"
+   style="border-radius: 16px; display: inline; float: left;">Back</a>
+<h1 class="display-4" style="margin: 0 auto; text-align: center;">Vendor {{ you }}'s {{ product }} Reviews:</h1>
+
+<div style="height: auto; width: 100%; justify-content: center;">
+    <div class="container overflow-auto"
+         style="margin-left: 25vh; border-radius: 16px; height: 60vh; overflow-y: scroll; overflow-x: hidden; display: flex; flex-direction: column-reverse;">
+        {% for review in feedback %}
+        <div class="container bg-{% if review.id() == me %}success{% elif review.id() == you %}primary{% else %}secondary{% endif %}">
+            <img src="/avatars/{{ review.id() }}.png" alt="Avatar"
+                 onerror="this.src = '{{ url_for('static', filename='pics/defaultAvatar.jpg') }}';">
+            <p><b style="font-size: 16pt;">
+                {% if review.id() == you %}Vendor {% endif %}@{{ review.id() }}:
+            </b></p>
+            {{ review.starsHTML() }}
+            {% if review.id() == me %}
+            <form class="bg-success" name="rvw" method="POST" action="edit" onsubmit="this.submit();return false;"
+                  id="feedbackrvw{{ review.index }}"
+                  style="border-radius: 16px; width: 95%; height: auto; overflow-x: hidden; float: right; display: inline;">
+            <textarea oninput="this.style.height=this.scrollHeight+'px';" onfocus="this.oninput();"
+                      onmouseover="this.oninput();" onwheel="this.oninput();" onload="this.oninput();" name="rvw"
+                      autocomplete="off" form="rvw{{ review.index }}" class="bg-success" id="rvw{{ review.index }}"
+                      draggable="false" placeholder="{{ review.rvw() }}"
+                      style="color: white; border-radius: 16px; float: right; resize: none; height: auto; width: 100%; white-space: pre-line; border: 0; overflow-y: hidden; font-size: 14pt; display: inline;">{{ review.rvw() }}</textarea>
+                <button type="button" class="btn btn-danger btn-sm" value="Delete" data-bs-toggle="modal"
+                        data-bs-target="#myModal_{{ review.index }}" style="float: right; display: inline;">
+                    Delete
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" value="Edit" id="edit-rvw{{ review.index }}"
+                        style="float: right; display: inline;">
+                    Edit
+                </button>
+                <div class="modal" id="myModal_{{ review.index }}" data-bs-backdrop="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Review Delete Confirmation</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to Delete Your Review?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" value="Delete"
+                                        id="delete-rvw{{ review.index }}" onsubmit="return false;">Delete
+                                </button>
+                                <button type="button" class="btn btn-secondary" value="Cancel"
+                                        data-bs-dismiss="modal">Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <p style="color: white; white-space: pre-line; font-size: 14pt;" class="white-text" id="white-text">
+                {{ review.rvw() }}
+            </p>
+            {% endif %}
+            <p><b id="edited{{ review.index }}" style="font-size: 14pt; display: inline;">
+                {% if review.isEdited() %}(Edited){% endif %}</b></p>
+            <span class="time-right"
+                  style="font-size: 14pt; display: inline; float: right;">{{ review.timeFormat() }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+{% endblock %}

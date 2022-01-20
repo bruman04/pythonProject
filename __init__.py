@@ -65,7 +65,26 @@ def review(USER: str, VENDOR: str, PRODUCT: str):
     for i in range(len(r)):
         r[i].index = i
     r.reverse()
-    return render_template("review.html", me=USER.strip(), review=r)
+    return render_template("review.html", me=USER.strip(), you=VENDOR.strip(), product=PRODUCT.strip(), review=r)
+
+
+# Done by Ng Rong Kai:
+
+@app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews/edit", methods=["POST"])
+def edit_review(USER: str, VENDOR: str, PRODUCT: str):
+    FEEDBACK: Feedback = Feedback(PRODUCT.strip(), VENDOR.strip())
+    try:
+        j: dict = request.json
+        index: int = int(j.get('i', -1))
+        newRvw: str = str(j.get("rvw", ''))
+        newStars: int = int(j.get("stars", 0))
+        if USER.strip() == FEEDBACK.getFeedback()[index].id().strip() and FEEDBACK.editFeedbackReview(
+                index, newRvw, newStars
+        ):
+            return '', 200
+    except Exception as EEE:
+        return "Error handling review edit:\n" + str(EEE), 403
+    return '', 403
 
 
 # test

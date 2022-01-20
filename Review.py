@@ -1,5 +1,8 @@
 from Chat import *
 
+starHTML: str = r"""<span class="fa fa-star checked"></span>"""
+noStarHTML: str = r"""<span class="fa fa-star"></span>"""
+
 
 # Done by Ng Rong Kai:
 
@@ -45,6 +48,9 @@ class Review(Message):
 
     def starsString(self):
         return (r'★' * self.rating() + r'☆' * abs(5 - self.rating()))[:5].strip()
+
+    def starsHTML(self):
+        return (starHTML * self.rating() + noStarHTML * abs(5 - self.rating())).strip()
 
     def editStars(self, new_stars: int = 3):
         return self.edit(self.rvw(), new_stars)
