@@ -3,12 +3,13 @@
 <!--Done by Ng Rong Kai:-->
 
 {% block title %}
-{{ product }} Product Reviews by {{ you }}:
+{{ product }} Product Reviews by Vendor {{ you }}:
 {% endblock %}
 
 {% block style %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/_navbar.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/review.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -26,9 +27,32 @@
             <p><b style="font-size: 16pt;">
                 {% if review.id() == you %}Vendor {% endif %}@{{ review.id() }}:
             </b></p>
-            {{ review.starsHTML() }}
+            <div class="stars{{ review.index }}" id="stars{{ review.index }}">
+                {{ review.starsHTML(review.index)|safe }}
+                <div class="stars">
+                    <input type="radio" name="stars" value="5"
+                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
+                    <label for="5"></label>
+
+                    <input type="radio" name="stars" value="4"
+                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
+                    <label for="4"></label>
+
+                    <input type="radio" name="stars" value="3"
+                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
+                    <label for="3"></label>
+
+                    <input type="radio" name="stars" value="2"
+                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
+                    <label for="2"></label>
+
+                    <input type="radio" name="stars" value="1"
+                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
+                    <label for="1"></label>
+                </div>
+            </div>
             {% if review.id() == me %}
-            <form class="bg-success" name="rvw" method="POST" action="edit" onsubmit="this.submit();return false;"
+            <form class="bg-success" name="rvw" method="POST" action="edit" onsubmit="this.submit(); return false;"
                   id="feedbackrvw{{ review.index }}"
                   style="border-radius: 16px; width: 95%; height: auto; overflow-x: hidden; float: right; display: inline;">
             <textarea oninput="this.style.height=this.scrollHeight+'px';" onfocus="this.oninput();"
@@ -66,6 +90,10 @@
                     </div>
                 </div>
             </form>
+            {% elif review.id() == you %}
+            <p style="color: white; white-space: pre-line; font-size: 16pt;" class="white-text" id="white-text2">
+                <b>{{ review.rvw() }}</b>
+            </p>
             {% else %}
             <p style="color: white; white-space: pre-line; font-size: 14pt;" class="white-text" id="white-text">
                 {{ review.rvw() }}
@@ -78,6 +106,45 @@
         </div>
         {% endfor %}
     </div>
+    <form name="review" method="POST" action="" id="review"
+          style="border-radius: 16px; position: absolute; bottom: 0; width: 95%; height: auto; margin-left: 35vh; margin-right: 15vh; overflow-x: hidden;">
+        <table class="table table-lg" style="border-radius: 16px; width: 100%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <th>
+                    <div class="stars">
+                        <input type="radio" id="5" name="stars" value="5">
+                        <label for="5"></label>
+
+                        <input type="radio" id="4" name="stars" value="4">
+                        <label for="4"></label>
+
+                        <input type="radio" id="3" name="stars" value="3" checked>
+                        <label for="3"></label>
+
+                        <input type="radio" id="2" name="stars" value="2">
+                        <label for="2"></label>
+
+                        <input type="radio" id="1" name="stars" value="1">
+                        <label for="1"></label>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <textarea name="text" autocomplete="off" required form="review" class="form-control" id="text"
+                              autofocus draggable="false"
+                              style="border-radius: 16px; resize: none; height: 100px; width: 100%; font-size: 14pt;"
+                              placeholder="Review Vendor @{{ you }} ..."></textarea>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary" value="Send"
+                            style="border-radius: 16px; margin-top: 25px; height: 50px; width: auto; font-size: 14pt; text-align: center;">
+                        Send
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 {% endblock %}
 

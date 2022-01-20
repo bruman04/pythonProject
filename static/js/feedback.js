@@ -18,9 +18,9 @@ function feedback(event, index, element) {
             xhr.open("POST", window.location.href + "/edit", true);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.send(JSON.stringify({
-                rvw: element.value,
                 i: index,
-                stars: 3
+                rvw: element.value,
+                stars: document.querySelectorAll(".__star" + index + "__").length
             }));
             document.getElementById("edited" + index).textContent = "(Edited)";
         };
@@ -54,7 +54,6 @@ window.addEventListener("load", function() {
             xhr.open("POST", window.location.href + "/edit", true);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.send(JSON.stringify({
-                rvw: '',
                 i: _I
             }));
             removeFadeOut(deleteEle.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement, 1);
@@ -69,6 +68,24 @@ window.addEventListener("load", function() {
 
         I++;
     };
+
+    document.getElementById("text").addEventListener("keypress", function(event) {
+        if (event.which === 13 && !event.shiftKey) {
+            event.target.form.dispatchEvent(new Event(
+                "submit", {
+                    cancelable: true
+                }
+            ));
+            event.preventDefault();
+        }
+    });
+
+    document.getElementById("review").addEventListener("submit", function(event) {
+        let thisEle = document.getElementById("review");
+        thisEle.submit();
+        thisEle.reset();
+        return false;
+    });
 });
 
 // Done by Ng Rong Kai.

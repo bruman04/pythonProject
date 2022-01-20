@@ -54,18 +54,18 @@ def listingpage():
 @app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews", methods=["GET", "POST"])
 def review(USER: str, VENDOR: str, PRODUCT: str):
     FEEDBACK: Feedback = Feedback(PRODUCT.strip(), VENDOR.strip())
-    if request.method == "POST":
+    if request.method == "POST":  # Handle posting a new review.
         f: ImmutableMultiDict[str, str] = request.form
         try:
             if not FEEDBACK.appendFeedbackReview(USER.strip(), str(f["text"]).strip(), int(f["stars"])):
-                raise ValueError("Failed to FEEDBACK.appendFeedbackReview() ! (Missing or Invalid Parameter(s).)")
+                return "Failed to FEEDBACK.appendFeedbackReview(...)!\n(Missing or Invalid Parameter(s).)", 403
         except Exception as EE:
-            return "Error handling review post:\n" + str(EE), 403
+            return "Error handling review post:\n" + str(EE).capitalize(), 403
     r: list[Review] = FEEDBACK.getFeedback()
-    for i in range(len(r)):
+    for i in range(len(r)):  # Handle retrieving all reviews of this product.
         r[i].index = i
     r.reverse()
-    return render_template("review.html", me=USER.strip(), you=VENDOR.strip(), product=PRODUCT.strip(), review=r)
+    return render_template("review.html", me=USER.strip(), you=VENDOR.strip(), product=PRODUCT.strip(), feedback=r)
 
 
 # Done by Ng Rong Kai:
@@ -73,18 +73,27 @@ def review(USER: str, VENDOR: str, PRODUCT: str):
 @app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews/edit", methods=["POST"])
 def edit_review(USER: str, VENDOR: str, PRODUCT: str):
     FEEDBACK: Feedback = Feedback(PRODUCT.strip(), VENDOR.strip())
-    try:
+    try:  # Handle editing a previously posted review.
         j: dict = request.json
         index: int = int(j.get('i', -1))
-        newRvw: str = str(j.get("rvw", ''))
-        newStars: int = int(j.get("stars", 0))
-        if USER.strip() == FEEDBACK.getFeedback()[index].id().strip() and FEEDBACK.editFeedbackReview(
-                index, newRvw, newStars
-        ):
-            return '', 200
+        if USER.strip() == FEEDBACK.getFeedback()[index].id().strip():
+            if "rvw" in j and "stars" in j:
+                if FEEDBACK.editFeedbackReview(index, str(j["rvw"]).strip(), int(j["stars"])):
+                    return '', 200
+            elif "rvw" in j:
+                if FEEDBACK.editFeedbackReviewMessage(index, str(j["rvw"]).strip()):
+                    return '', 200
+            elif "stars" in j:
+                if FEEDBACK.editFeedbackReviewStars(index, int(j["stars"])):
+                    return '', 200
+            else:
+                if FEEDBACK.delFeedbackReview(index):
+                    return '', 200
+        else:
+            return "Error handling review edit or delete:\nUnauthorised access!", 403
     except Exception as EEE:
         return "Error handling review edit:\n" + str(EEE), 403
-    return '', 403
+    return "Error handling review edit:\nInternal server error while performing operation.", 403
 
 
 # test

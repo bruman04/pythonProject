@@ -1,6 +1,6 @@
 from Chat import *
 
-starHTML: str = r"""<span class="fa fa-star checked"></span>"""
+starHTML: str = r"""<span class="fa fa-star checked __star{starIndex}__"></span>"""
 noStarHTML: str = r"""<span class="fa fa-star"></span>"""
 
 
@@ -42,15 +42,19 @@ class Review(Message):
     def editReview(self, new_review: str = ''):
         return self.edit(new_review, self.rating())
 
-    def rating(self):
-        self.stars = int(round(self.stars if 1 <= self.stars <= 5 else 3))
+    def rating(self) -> int:
+        self.stars: int = int(round(self.stars if 1 <= self.stars <= 5 else 3))
         return self.stars
 
     def starsString(self):
         return (r'★' * self.rating() + r'☆' * abs(5 - self.rating()))[:5].strip()
 
-    def starsHTML(self):
-        return (starHTML * self.rating() + noStarHTML * abs(5 - self.rating())).strip()
+    def starsHTML(self, starIndex: str = ''):
+        # Return the stars in HTML format for displaying.
+        return (
+                starHTML.replace(r"{starIndex}", str(starIndex).strip().replace(' ', '')) * self.rating() +
+                noStarHTML * abs(5 - self.rating())
+        ).strip()
 
     def editStars(self, new_stars: int = 3):
         return self.edit(self.rvw(), new_stars)
