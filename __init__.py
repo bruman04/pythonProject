@@ -1,3 +1,5 @@
+from flask import Flask, render_template, request, redirect, url_for, flash
+from form import CreateItemForm, CreateLoanForm
 import os
 import shelve
 
@@ -7,6 +9,8 @@ from werkzeug.datastructures import ImmutableMultiDict
 import Item
 import Loan
 from Review import *
+import shelve
+from Chat import *
 
 # Ensure WTForms is v2.3.3 (Otherwise it won't work)
 try:
@@ -32,7 +36,12 @@ def listingpage():
 
     items_dict = {}
     db = shelve.open('items.db', 'c')
-    items_dict = db['Items']
+
+    try:
+        items_dict = db['Items']
+
+    except IndexError:
+        print("Error in retrieving items")
 
     db.close()
 
@@ -91,6 +100,9 @@ def update_item(id):
         db = shelve.open('items.db', 'w')
         items_dict = db["Items"]
 
+
+
+
         item = items_dict.get(id)
         item.set_image(update_item_form.image.data)
         request.files['image'].save(
@@ -138,8 +150,13 @@ def delete_item(id):
 
     items_dict = {}
     db = shelve.open('items.db', 'w')
-    items_dict = db['Items']
+    try:
+        items_dict = db['Items']
 
+    except IndexError:
+        print("Error in retreiving items")
+
+    #delete image from static
     # delete image from static
     os.remove(f'static/images/{id}.png')
 
@@ -211,7 +228,7 @@ def create_loan():
 
         try:
             future_loans_dict = db['PreviousLoans']
-        except:
+        except IndexError:
             print("Error in retrieving items")
 
         # get information entered into form

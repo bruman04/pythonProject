@@ -1,11 +1,11 @@
 import itertools
-
+from time import time_ns
 class Item:
-  id_iter = itertools.count()
+
 
   def __init__(self, image, name, description, rate, on_loan, available, location):
 
-      self.__id = next(Item.id_iter)
+      self.__id = time_ns()
       self.__image = image
       self.__name = name
       self.__description = description
