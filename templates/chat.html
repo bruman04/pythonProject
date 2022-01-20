@@ -19,7 +19,7 @@
 
 <div style="height: auto; width: 100%; justify-content: center;">
     <div class="container overflow-auto"
-         style="border-radius: 16px; height: 60vh; overflow-y: scroll; overflow-x: hidden; display: flex; flex-direction: column-reverse;">
+         style="margin-left: 25vh; border-radius: 16px; height: 60vh; overflow-y: scroll; overflow-x: hidden; display: flex; flex-direction: column-reverse;">
         {% for message in chat %}
         <div class="container bg-{% if message.id() == me %}success{% else %}primary{% endif %}">
             <img src="/avatars/{{ message.id() }}.png" alt="Avatar"
@@ -83,7 +83,7 @@
         {% endfor %}
     </div>
     <form name="chat" method="POST" action="" id="chat"
-          style="border-radius: 16px; position: absolute; bottom: 0; width: 95%; height: auto; margin-left: 25vh; margin-right: 25vh; overflow-x: hidden;">
+          style="border-radius: 16px; position: absolute; bottom: 0; width: 95%; height: auto; margin-left: 35vh; margin-right: 15vh; overflow-x: hidden;">
         <table class="table table-lg" style="border-radius: 16px; width: 100%; margin-left: auto; margin-right: auto;">
             <tr>
                 <td>
