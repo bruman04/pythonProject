@@ -4,6 +4,8 @@ from time import time_ns
 
 
 # Done by Ng Rong Kai:
+from typing import List, Set
+
 
 class Message:
     def __init__(
@@ -70,17 +72,17 @@ class Chat:
         self.chatKey: str = f"{customer_id}|{vendor_id}"
 
     def getLastMessageObject(self) -> Message:
-        C: list[Message] = self.getChat()
+        C: List[Message] = self.getChat()
         return C[-1] if C else Message().delete()
 
     def getUnreadMessagesCount(self, asVendor: bool) -> int:
-        C: list[Message] = self.getChat()
+        C: List[Message] = self.getChat()
         i: int = 0
         while C and C.pop(-1).sender_id == (self.customer_id if asVendor else self.vendor_id):
             i += 1
         return i
 
-    def getChatsByID(self, _id: str) -> set[str]:
+    def getChatsByID(self, _id: str) -> Set[str]:
         chats: set = set()
         chatdb = open(self.db, 'c')
         for k in chatdb:
@@ -93,7 +95,7 @@ class Chat:
         chatdb.close()
         return chats
 
-    def getChat(self) -> list[Message]:
+    def getChat(self) -> List[Message]:
         chatdb = open(self.db, 'c')
         if self.chatKey in chatdb:
             chat = chatdb[self.chatKey]
@@ -102,7 +104,7 @@ class Chat:
         chatdb.close()
         return chat
 
-    def setChat(self, chat: list[Message]) -> bool:
+    def setChat(self, chat: List[Message]) -> bool:
         chatdb = open(self.db, 'c')
         try:
             chatdb[self.chatKey] = chat
@@ -127,12 +129,12 @@ class Chat:
             chatdb.close()
         return True
 
-    def appendMultiChat(self, messageObjects: list[Message]) -> bool:
+    def appendMultiChat(self, messageObjects: List[Message]) -> bool:
         return self.setChat(self.getChat() + [m for m in messageObjects if m.msg().strip()])
 
     def appendChatMessage(self, asVendor: bool, message: str, utcTimezone: int = 8) -> bool:
         if message.strip():
-            c: list[Message] = self.getChat()
+            c: List[Message] = self.getChat()
             c.append(Message(
                 sender_id=self.vendor_id if asVendor else self.customer_id,
                 message=message.strip(),
@@ -143,7 +145,7 @@ class Chat:
 
     def editChatMessage(self, message_index: int, new_message: str) -> bool:
         if new_message.strip():
-            c: list[Message] = self.getChat()
+            c: List[Message] = self.getChat()
             try:
                 c[message_index] = c[message_index].edit(new_message.strip())
             except IndexError:
@@ -152,7 +154,7 @@ class Chat:
         return self.delChatMessage(message_index)
 
     def delChatMessage(self, message_index: int) -> bool:
-        C: list[Message] = self.getChat()
+        C: List[Message] = self.getChat()
         try:
             del C[message_index]
         except IndexError:

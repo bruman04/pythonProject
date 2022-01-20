@@ -4,12 +4,15 @@
 
 {% block content %}
 <h1 class="display-4" id = "page_top">RentPlatter</h1>
-<div id = mainbody>
+<div id = mainbody >
 <hr>
 <p id = "page_top"> My Listings </p>
 <!--print items in dictionary-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
 {%for item in items_list%}
-<div id = "listing">
+<div id = "listing" class="col-sm">
     <img src= "{{url_for('static', filename='/images/'~item.get_id()~'.png')}}" alt="{{item.get_name()}}"  id="listingImage">
     <div id="listingInfo">
     <p>Item ID: {{item.get_id()}}</p>
@@ -33,6 +36,10 @@
     </form>
 {%endfor%}
 </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 

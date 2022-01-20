@@ -54,9 +54,15 @@ ul{
 }
 
 #listing{
-    padding: 50px;
+
+    border-style: solid
 }
 
+.form-group{
+   margin-left: 500px;
+   margin-right: 500px;
+
+}
 /* Display colour for On Loan and Available */
 #on_loan{
 color: red;
@@ -73,6 +79,7 @@ color: red;
     width: auto;
     max-width: 300px;
     max-height: 300px;
+    margin-left: 55px;
 }
 
 #listingInfo{
@@ -86,13 +93,8 @@ color: red;
 
 }
 
-#editTitle{
+#Title{
     text-align: center;
-}
-#formField{
-    float: right;
-    padding-right: 500px;
-    padding-left: 500px;
 }
 
 #submit{
