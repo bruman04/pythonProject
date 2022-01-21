@@ -35,7 +35,6 @@
   font-size: 20px;
   color: lightgrey;
   margin: 0 5px;
-  text-shadow: 2px 2px #bbb;
 }
 
 .stars label:before{
@@ -44,7 +43,6 @@
 
 .stars input:checked ~ label{
   color: gold;
-  text-shadow: 1px 1px #c60;
 }
 
 .stars:not(:checked) > label:hover, .stars:not(:checked) > label:hover ~ label{
@@ -53,7 +51,6 @@
 
 .stars input:checked > label:hover, .stars input:checked > label:hover ~ label{
   color: gold;
-  text-shadow: 1px 1px goldenrod;
 }
 
 .stars .result:before{

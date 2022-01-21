@@ -8,20 +8,31 @@ window.setTimeout(function() {
     window.location.reload(true);
 }, 60000);
 
-function feedback(event, index, element) {
-    if (event.which === 13 && !event.shiftKey) {
-        event.preventDefault();
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function feedback(event, index, element, force) {
+    if (force || (event.which === 13 && !event.shiftKey)) {
+        element = document.getElementById("rvw" + index);
         element.blur();
-        if (element.value != element.placeholder) {
+        if (force || (element.value != element.placeholder)) {
             element.placeholder = element.value;
             let xhr = new XMLHttpRequest();
             xhr.open("POST", window.location.href + "/edit", true);
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(JSON.stringify({
-                i: index,
-                rvw: element.value,
-                stars: document.querySelectorAll(".__star" + index + "__").length
-            }));
+            setTimeout(function() {
+                xhr.send(JSON.stringify({
+                    i: index,
+                    rvw: element.value,
+                    stars: document.querySelector("input[name='stars" + index + "']:checked").value
+                }));
+                if (force) {
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 100);
+                };
+            }, 100);
             document.getElementById("edited" + index).textContent = "(Edited)";
         };
         if (element.value.trim() === '') {
@@ -47,7 +58,7 @@ window.addEventListener("load", function() {
         let deleteEle = document.getElementById("delete-rvw" + _I);
         let editEle = document.getElementById("edit-rvw" + _I);
 
-        ele.addEventListener("keypress", (event) => feedback(event, _I, ele));
+        ele.addEventListener("keypress", (event) => feedback(event, _I, ele, false));
 
         deleteEle.addEventListener("click", function(event) {
             let xhr = new XMLHttpRequest();

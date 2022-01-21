@@ -27,30 +27,7 @@
             <p><b style="font-size: 16pt;">
                 {% if review.id() == you %}Vendor {% endif %}@{{ review.id() }}:
             </b></p>
-            <div class="stars{{ review.index }}" id="stars{{ review.index }}">
-                {{ review.starsHTML(review.index)|safe }}
-                <div class="stars">
-                    <input type="radio" name="stars" value="5"
-                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
-                    <label for="5"></label>
-
-                    <input type="radio" name="stars" value="4"
-                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
-                    <label for="4"></label>
-
-                    <input type="radio" name="stars" value="3"
-                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
-                    <label for="3"></label>
-
-                    <input type="radio" name="stars" value="2"
-                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
-                    <label for="2"></label>
-
-                    <input type="radio" name="stars" value="1"
-                           onload="if ({{ review.rating() }} == this.value) {this.checked = 'true';};">
-                    <label for="1"></label>
-                </div>
-            </div>
+            {{ review.starsHTML(review.index, review.id() != me)|safe }}
             {% if review.id() == me %}
             <form class="bg-success" name="rvw" method="POST" action="edit" onsubmit="this.submit(); return false;"
                   id="feedbackrvw{{ review.index }}"
