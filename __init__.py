@@ -1,12 +1,11 @@
+from flask import Flask, render_template, request, redirect, url_for, flash
+from form import CreateItemForm, CreateLoanForm
 import os
-import shelve
-
-from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.datastructures import ImmutableMultiDict
-
 import Item
 import Loan
-from Review import *
+import shelve
+from PIL import Image
+from Chat import *
 
 # Ensure WTForms is v2.3.3 (Otherwise it won't work)
 try:
@@ -49,25 +48,6 @@ def listingpage():
     return render_template('listingpage.html', items_list=items_list)
 
 
-# Done by Ng Rong Kai:
-
-@app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews", methods=["GET", "POST"])
-def review(USER: str, VENDOR: str, PRODUCT: str):
-    FEEDBACK: Feedback = Feedback(PRODUCT.strip(), VENDOR.strip())
-    if request.method == "POST":
-        f: ImmutableMultiDict[str, str] = request.form
-        try:
-            if not FEEDBACK.appendFeedbackReview(USER.strip(), str(f["text"]).strip(), int(f["stars"])):
-                raise ValueError("Failed to FEEDBACK.appendFeedbackReview() ! (Missing or Invalid Parameter(s).)")
-        except Exception as EE:
-            return "Error handling review post:\n" + str(EE), 403
-    r: list[Review] = FEEDBACK.getFeedback()
-    for i in range(len(r)):
-        r[i].index = i
-    r.reverse()
-    return render_template("review.html", me=USER.strip(), review=r)
-
-
 # test
 # view full specs of item
 @app.route('/detailedview/<int:id>')
@@ -98,15 +78,25 @@ def update_item(id):
 
         item = items_dict.get(id)
         item.set_image(update_item_form.image.data)
-        request.files['image'].save(
-            os.path.join('static/images', f"{item.get_id()}.png")
-        )
+        # request.files['image'].save(
+        #     os.path.join('static/images', f"{item.get_id()}.png")
+        # )
         item.set_name(update_item_form.name.data)
         item.set_description(update_item_form.description.data)
         item.set_rate(update_item_form.rate.data)
         item.set_on_loan(update_item_form.on_loan.data)
         item.set_available(update_item_form.available.data)
         item.set_location(update_item_form.location.data)
+        imageName = str(id)
+        request.files['image'].save(os.path.join('static/images', f"{imageName}1.png"))
+        img =os.stat(os.path.join('static/images', f"{imageName}1.png")).st_size
+        if img == 0:
+          os.remove(os.path.join('static/images', f"{imageName}1.png"))
+        else:
+          im = Image.open(request.files['image'])
+          im = im.save(os.path.join('static/images', f"{imageName}.png"))
+          os.remove(os.path.join('static/images', f"{imageName}1.png"))
+
 
         db['Items'] = items_dict
         db.close()
@@ -120,12 +110,7 @@ def update_item(id):
         db = shelve.open('items.db', 'r')
         items_dict = db['Items']
         item = items_dict.get(id)
-        # items_list.append(item)
         update_item_form.image.data = item.get_image()
-        print(update_item_form.image.data)
-        # request.files['image'].save(
-        #     os.path.join('static/images', f"{item.get_id()}.png")
-        # )
         update_item_form.name.data = item.get_name()
         update_item_form.description.data = item.get_description()
         update_item_form.rate.data = item.get_rate()
@@ -149,7 +134,7 @@ def delete_item(id):
     except IndexError:
         print("Error in retreiving items")
 
-    # delete image from static
+
     # delete image from static
     os.remove(f'static/images/{id}.png')
 

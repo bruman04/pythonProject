@@ -12,14 +12,17 @@
 </head>
 <body>
 
+
+{% block sidenavbar %}
+{% include 'includes/sidenavbar.html' %}
+{% endblock %}
+
 <div class="container-fluid">
     {% block content %}
     {% endblock %}
 </div>
 
-{% block sidenavbar %}
-{% include 'includes/sidenavbar.html' %}
-{% endblock %}
+
 
 {% block scripts %}
 <!-- Popper 2.10.2, Bootstrap 5.1.2 JavaScript -->

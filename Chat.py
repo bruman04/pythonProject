@@ -72,11 +72,11 @@ class Chat:
         self.chatKey: str = f"{customer_id}|{vendor_id}"
 
     def getLastMessageObject(self) -> Message:
-        C: List[Message] = self.getChat()
+        C: list[Message] = self.getChat()
         return C[-1] if C else Message().delete()
 
     def getUnreadMessagesCount(self, asVendor: bool) -> int:
-        C: List[Message] = self.getChat()
+        C: list[Message] = self.getChat()
         i: int = 0
         while C and C.pop(-1).sender_id == (self.customer_id if asVendor else self.vendor_id):
             i += 1
@@ -134,7 +134,7 @@ class Chat:
 
     def appendChatMessage(self, asVendor: bool, message: str, utcTimezone: int = 8) -> bool:
         if message.strip():
-            c: List[Message] = self.getChat()
+            c: list[Message] = self.getChat()
             c.append(Message(
                 sender_id=self.vendor_id if asVendor else self.customer_id,
                 message=message.strip(),
@@ -145,7 +145,7 @@ class Chat:
 
     def editChatMessage(self, message_index: int, new_message: str) -> bool:
         if new_message.strip():
-            c: List[Message] = self.getChat()
+            c: list[Message] = self.getChat()
             try:
                 c[message_index] = c[message_index].edit(new_message.strip())
             except IndexError:
@@ -154,7 +154,7 @@ class Chat:
         return self.delChatMessage(message_index)
 
     def delChatMessage(self, message_index: int) -> bool:
-        C: List[Message] = self.getChat()
+        C: list[Message] = self.getChat()
         try:
             del C[message_index]
         except IndexError:
