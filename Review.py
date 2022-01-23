@@ -41,12 +41,42 @@ class Review(Message):
     def editReview(self, new_review: str = ''):
         return self.edit(new_review, self.rating())
 
-    def rating(self):
-        self.stars = int(round(self.stars if 1 <= self.stars <= 5 else 3))
+    def rating(self) -> int:
+        self.stars: int = int(round(self.stars if 1 <= self.stars <= 5 else 3))
         return self.stars
 
     def starsString(self):
         return (r'★' * self.rating() + r'☆' * abs(5 - self.rating()))[:5].strip()
+
+    def starsHTML(self, starIndex: int = 0, disabled: bool = False) -> str:
+        """
+        :param disabled: Optional disabled tag for the stars HTML radio buttons.
+        :param starIndex: Optional integer index of the stars HTML class to return.
+        :return: The stars in HTML format for displaying and selecting radio buttons:
+        """
+
+        html: str = f"""
+        <div class="stars{starIndex}" id="stars{starIndex}" style="margin: 0; padding: 0; box-sizing: border-box; float: left; text-align: left;">
+            <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="5{starIndex}" disabled value="5">
+            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*5*/ margin: 0 5px; content: '★';" for="5{starIndex}">★</label>
+            
+            <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="4{starIndex}" disabled value="4">
+            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*4*/ margin: 0 5px; content: '★';" for="4{starIndex}">★</label>
+            
+            <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="3{starIndex}" disabled value="3">
+            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*3*/ margin: 0 5px; content: '★';" for="3{starIndex}">★</label>
+            
+            <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="2{starIndex}" disabled value="2">
+            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*2*/ margin: 0 5px; content: '★';" for="2{starIndex}">★</label>
+            
+            <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="1{starIndex}" disabled value="1">
+            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*1*/ margin: 0 5px; content: '★';" for="1{starIndex}">★</label>
+        </div>""".replace(f' disabled value="{self.rating()}">', f' value="{self.rating()}" checked>') \
+            .replace(" disabled", " disabled" if disabled else '').strip().replace('\n', '').replace('\t', '')
+
+        for star in range(self.rating() + 1, 6):
+            html = html.replace(f"color: gold;/*{round(int(star))}*/", "color: lightgrey;")
+        return html
 
     def editStars(self, new_stars: int = 3):
         return self.edit(self.rvw(), new_stars)

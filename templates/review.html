@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+<!--Done by Ng Rong Kai:-->
+
+{% block title %}
+{{ product }} Product Reviews by Vendor {{ you }}:
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/_navbar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/review.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+{% endblock %}
+
+{% block content %}
+<a href="/{{ me }}/{{ you }}/{{ product }}" class="btn btn-outline-dark btn-lg"
+   style="border-radius: 16px; display: inline; float: left;">Back</a>
+<h1 class="display-4" style="margin: 0 auto; text-align: center;">Vendor {{ you }}'s {{ product }} Reviews:</h1>
+
+<div style="height: auto; width: 100%; justify-content: center;">
+    <div class="container overflow-auto"
+         style="margin-left: 25vh; border-radius: 16px; height: 60vh; overflow-y: scroll; overflow-x: hidden; display: flex; flex-direction: column-reverse;">
+        {% for review in feedback %}
+        <div class="container bg-{% if review.id() == me %}success{% elif review.id() == you %}primary{% else %}secondary{% endif %}">
+            <img src="/avatars/{{ review.id() }}.png" alt="Avatar"
+                 onerror="this.src = '{{ url_for('static', filename='pics/defaultAvatar.jpg') }}';">
+            <p><b style="font-size: 16pt;">
+                {% if review.id() == you %}Vendor {% endif %}@{{ review.id() }}:
+            </b></p>
+            {{ review.starsHTML(review.index, review.id() != me)|safe }}
+            {% if review.id() == me %}
+            <form class="bg-success" name="rvw" method="POST" action="edit" onsubmit="this.submit(); return false;"
+                  id="feedbackrvw{{ review.index }}"
+                  style="border-radius: 16px; width: 95%; height: auto; overflow-x: hidden; float: right; display: inline;">
+            <textarea oninput="this.style.height=this.scrollHeight+'px';" onfocus="this.oninput();"
+                      onmouseover="this.oninput();" onwheel="this.oninput();" onload="this.oninput();" name="rvw"
+                      autocomplete="off" form="rvw{{ review.index }}" class="bg-success" id="rvw{{ review.index }}"
+                      draggable="false" placeholder="{{ review.rvw() }}"
+                      style="color: white; border-radius: 16px; float: right; resize: none; height: auto; width: 100%; white-space: pre-line; border: 0; overflow-y: hidden; font-size: 14pt; display: inline;">{{ review.rvw() }}</textarea>
+                <button type="button" class="btn btn-danger btn-sm" value="Delete" data-bs-toggle="modal"
+                        data-bs-target="#myModal_{{ review.index }}" style="float: right; display: inline;">
+                    Delete
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" value="Edit" id="edit-rvw{{ review.index }}"
+                        style="float: right; display: inline;">
+                    Edit
+                </button>
+                <div class="modal" id="myModal_{{ review.index }}" data-bs-backdrop="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Review Delete Confirmation</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to Delete Your Review?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" value="Delete"
+                                        id="delete-rvw{{ review.index }}" onsubmit="return false;">Delete
+                                </button>
+                                <button type="button" class="btn btn-secondary" value="Cancel"
+                                        data-bs-dismiss="modal">Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {% elif review.id() == you %}
+            <p style="color: white; white-space: pre-line; font-size: 16pt;" class="white-text" id="white-text2">
+                <b>{{ review.rvw() }}</b>
+            </p>
+            {% else %}
+            <p style="color: white; white-space: pre-line; font-size: 14pt;" class="white-text" id="white-text">
+                {{ review.rvw() }}
+            </p>
+            {% endif %}
+            <p><b id="edited{{ review.index }}" style="font-size: 14pt; display: inline;">
+                {% if review.isEdited() %}(Edited){% endif %}</b></p>
+            <span class="time-right"
+                  style="font-size: 14pt; display: inline; float: right;">{{ review.timeFormat() }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    <form name="review" method="POST" action="" id="review"
+          style="border-radius: 16px; position: absolute; bottom: 0; width: 95%; height: auto; margin-left: 35vh; margin-right: 15vh; overflow-x: hidden;">
+        <table class="table table-lg" style="border-radius: 16px; width: 100%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <th>
+                    <div class="stars">
+                        <input type="radio" id="5" name="stars" value="5">
+                        <label for="5"></label>
+
+                        <input type="radio" id="4" name="stars" value="4">
+                        <label for="4"></label>
+
+                        <input type="radio" id="3" name="stars" value="3" checked>
+                        <label for="3"></label>
+
+                        <input type="radio" id="2" name="stars" value="2">
+                        <label for="2"></label>
+
+                        <input type="radio" id="1" name="stars" value="1">
+                        <label for="1"></label>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <textarea name="text" autocomplete="off" required form="review" class="form-control" id="text"
+                              autofocus draggable="false"
+                              style="border-radius: 16px; resize: none; height: 100px; width: 100%; font-size: 14pt;"
+                              placeholder="Review Vendor @{{ you }} ..."></textarea>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary" value="Send"
+                            style="border-radius: 16px; margin-top: 25px; height: 50px; width: auto; font-size: 14pt; text-align: center;">
+                        Send
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+{% endblock %}

@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from form import CreateItemForm, CreateLoanForm
+from werkzeug.datastructures import ImmutableMultiDict
 import os
 import Item
 import Loan
 import shelve
 from PIL import Image
 from Chat import *
+from Review import *
 
 # Ensure WTForms is v2.3.3 (Otherwise it won't work)
 try:
@@ -46,6 +48,53 @@ def listingpage():
         items_list.append(item)
 
     return render_template('listingpage.html', items_list=items_list)
+
+
+# Done by Ng Rong Kai:
+
+@app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews", methods=["GET", "POST"])
+def review(USER: str, VENDOR: str, PRODUCT: str):
+    FEEDBACK: Feedback = Feedback(PRODUCT.strip(), VENDOR.strip())
+    if request.method == "POST":  # Handle posting a new review.
+        f: ImmutableMultiDict[str, str] = request.form
+        try:
+            if not FEEDBACK.appendFeedbackReview(USER.strip(), str(f["text"]).strip(), int(f["stars"])):
+                return "Failed to FEEDBACK.appendFeedbackReview(...)!\n(Missing or Invalid Parameter(s).)", 403
+        except Exception as EE:
+            return "Error handling review post:\n" + str(EE).capitalize(), 403
+    r: list[Review] = FEEDBACK.getFeedback()
+    for i in range(len(r)):  # Handle retrieving all reviews of this product.
+        r[i].index = i
+    r.reverse()
+    return render_template("review.html", me=USER.strip(), you=VENDOR.strip(), product=PRODUCT.strip(), feedback=r)
+
+
+# Done by Ng Rong Kai:
+
+@app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews/edit", methods=["POST"])
+def edit_review(USER: str, VENDOR: str, PRODUCT: str):
+    FEEDBACK: Feedback = Feedback(PRODUCT.strip(), VENDOR.strip())
+    try:  # Handle editing a previously posted review.
+        j: dict = request.json
+        index: int = int(j.get('i', -1))
+        if USER.strip() == FEEDBACK.getFeedback()[index].id().strip():
+            if "rvw" in j and "stars" in j:
+                if FEEDBACK.editFeedbackReview(index, str(j["rvw"]).strip(), int(j["stars"])):
+                    return '', 200
+            elif "rvw" in j:
+                if FEEDBACK.editFeedbackReviewMessage(index, str(j["rvw"]).strip()):
+                    return '', 200
+            elif "stars" in j:
+                if FEEDBACK.editFeedbackReviewStars(index, int(j["stars"])):
+                    return '', 200
+            else:
+                if FEEDBACK.delFeedbackReview(index):
+                    return '', 200
+        else:
+            return "Error handling review edit or delete:\nUnauthorised access!", 403
+    except Exception as EEE:
+        return "Error handling review edit:\n" + str(EEE), 403
+    return "Error handling review edit:\nInternal server error while performing operation.", 403
 
 
 # test
