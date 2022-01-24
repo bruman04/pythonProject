@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% set active_page = "retrieveUsers" %}
+{% block title %}Retrieve Customer{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve Customers</h1>
+
+
+
+<div>
+  {% set count = count - 1 %}
+  {% if count == 0 %}
+  <p>There are no users.</p>
+  {% elif count == 1 %}
+  <p>There is 1 user.</p>
+  {% else %}
+  <p>There are {{ count }} users.</p>
+  {% endif %}
+</div>
+
+
+
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User Number</th>
+        <th>User ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Password</th>
+
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customerly in range(customer_list|length) %}
+      {% set customer = customer_list[customerly] %}
+      <tr>
+        <td>{{ customerly }}</td>
+        <td>{{ customer[-1] }}</td>
+        <td>{{ customer[0] }}</td>
+        <td>{{ customer[1] }}</td>
+        <td>{{ customer[2] }}</td>
+
+        {% set customer = customer[-1]|string %}
+        {% set customer = customer|string %}
+
+
+        <td><a href="/updateCustomer/{{ customerly }}" class="btn btn-warning">Update</a></td>
+
+
+        {% set customer = customer|int %}
+        <td>
+          <form action="{{url_for('deleteCustomer', id=customerly)}}" method="POST">
+            <input type="submit" value="Delete" class="btn btn-danger">
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
