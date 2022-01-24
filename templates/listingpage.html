@@ -8,40 +8,44 @@
 <hr>
 <p id = "page_top"> My Listings </p>
 <!--print items in dictionary-->
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-{%for item in items_list%}
-<div id = "listing" class="col-sm">
-    <img src= "{{url_for('static', filename='/images/'~item.get_id()~'.png')}}" alt="{{item.get_name()}}"  id="listingImage">
-    <div id="listingInfo">
-    <p>Item ID: {{item.get_id()}}</p>
-    <p>Item Name: {{item.get_name()}}</p>
-    <p>Specifications: {{item.get_description()}}</p>
-    <p>${{item.get_rate()}}/day</p>
-    <p id = "on_loan">On Loan: {{item.get_on_loan()}}</p>
-    <p id = "available">Available: {{item.get_available()}}</p>
-    </div>
-<!--    update item-->
-    <a href='/updateitem/{{item.get_id()}}/' class="btn btn-warning" id = "updateButton">Update Item</a>
 
-<!--detailed view-->
-<!--    <a href='/detailedview/{{item.get_id()}}/' class="btn btn-warning">Detailed View</a>-->
+            <div class="card-deck">
+                {%for item in items_list%}
+             <div class="card d-flex position-relative" style="width: 25rem;">
+                <div id = "listing">
+                    <img src= "{{url_for('static', filename='/images/'~item.get_id()~'.png')}}" alt="{{item.get_name()}}"  id="listingImage" class="card-img-top w-100">
+                    <div id="listingInfo">
+                    <p>Item ID: {{item.get_id()}}</p>
+                    <p class="card-title">Item Name: {{item.get_name()}}</p>
+                    <div class="card-body">
+                    <p>Specifications: {{item.get_description()}}</p>
+                    <p>${{item.get_rate()}}/day</p>
+                    <p id = "on_loan">On Loan: {{item.get_on_loan()}}</p>
+                    <p id = "available">Available: {{item.get_available()}}</p>
+
+                <!--    update item-->
+                    <a href='/updateitem/{{item.get_id()}}/' class="btn btn-warning" id = "updateButton">Update Item</a>
+
+                <!--detailed view-->
+                <!--    <a href='/detailedview/{{item.get_id()}}/' class="btn btn-warning">Detailed View</a>-->
 
 
 
-<!--    delete item-->
-    <form action="{{url_for('delete_item', id=item.get_id())}}" method="POST">
-    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?')" id = "deleteItem">
-    </form>
-{%endfor%}
-</div>
+                <!--    delete item-->
+                    <form action="{{url_for('delete_item', id=item.get_id())}}" method="POST">
+                    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?')" id = "deleteItem">
+                    </form>
+                        </div>
+                </div>
+                </div>
+                {%endfor%}
+
+
+
+
+                 </div>
             </div>
-        </div>
-    </div>
 
 </div>
-
-
 
 {% endblock %}
