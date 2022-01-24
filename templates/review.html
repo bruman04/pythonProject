@@ -17,6 +17,9 @@
    style="border-radius: 16px; display: inline; float: left;">Back</a>
 <h1 class="display-4" style="margin: 0 auto; text-align: center;">Vendor {{ you }}'s {{ product }} Reviews:</h1>
 
+<img class="img-fluid" src="{{ url_for('static', filename='/images/'~product~'.png') }}" alt="Product {{ product }}"
+     onerror="this.src = '{{ url_for('static', filename='pics/defaultProduct.jpg') }}';" id="productDisplay">
+
 <div style="height: auto; width: 100%; justify-content: center;">
     <div class="container overflow-auto"
          style="margin-left: 25vh; border-radius: 16px; height: 60vh; overflow-y: scroll; overflow-x: hidden; display: flex; flex-direction: column-reverse;">

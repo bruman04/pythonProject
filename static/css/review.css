@@ -70,3 +70,23 @@
 .stars input:checked ~ .result:before{
   display: block;
 }
+
+#productDisplay {
+  display: block;
+  width: 20%;
+  height: 20%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 99;
+  border-radius: 3vh;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+#productDisplay:hover {
+  width: 30%;
+  height: 30%;
+  border-radius: 5vh;
+  opacity: 0.9;
+}

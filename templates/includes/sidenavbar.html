@@ -1,22 +1,71 @@
-<div class="sidenav" id="sidenav">
-    <h2>Account</h2>
-    <ul>
-        <li><a href="#">Profile</a></li>
-        <li><a href="#">Payment</a></li>
-        <li><a href="#">Password</a></li>
-    </ul>
+<!--<div class="sidenav">-->
 
-    <h2>Loans</h2>
-    <ul>
-        <li><a href="/currentloans">Ongoing Loans</a></li>
-        <li><a href="/futureloans">Future Loans</a></li>
-        <li><a href="/previousloans">Previous Loans</a></li>
-        <li><a href="/createloan">Test: Create Loan</a></li>
-    </ul>
+<!--  <h2>Account</h2>-->
+<!--    <ul>-->
+<!--        <li><a href="#">Profile</a></li>-->
+<!--        <li><a href="#">Payment</a></li>-->
+<!--        <li><a href="#">Password</a></li>-->
+<!--    </ul>-->
+<!--  <h2>Loans</h2>-->
+<!--    <ul>-->
+<!--      <li><a href="/currentloans">Ongoing Loans</a></li>-->
+<!--      <li><a href="/futureloans">Future Loans</a></li>-->
+<!--      <li><a href="/previousloans">Previous Loans</a></li>-->
+<!--      <li><a href="/createloan">Test: Create Loan</a></li>-->
+<!--    </ul>-->
 
-    <h2>Listed Items</h2>
-    <ul>
-        <li><a href="/">My Listings</a></li>
-        <li><a href="/createitem">Add Listing</a></li>
-    </ul>
-</div>
+<!--  <h2>Listed Items</h2>-->
+<!--    <ul>-->
+<!--  <li><a href="/">My Listings</a></li>-->
+<!--  <li><a href="/createitem">Add Listing</a></li>-->
+<!--    </ul>-->
+
+
+<!--</div>-->
+
+<!--&lt;!&ndash; Page content &ndash;&gt;-->
+<!--<div class="main">-->
+<!--  ...-->
+<!--</div>-->
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Rentplatter+</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Account</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Payment</a></li>
+                        <li><a class="dropdown-item" href="#">Password</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Loan
+                        Management</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/futureloans">Upcoming</a></li>
+                        <li><a class="dropdown-item" href="/currentloans">Current</a></li>
+                        <li><a class="dropdown-item" href="/previousloans">Previous</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Inventory
+                        Management</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/">My Listings</a></li>
+                        <li><a class="dropdown-item" href="/createitem">New Listing</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
