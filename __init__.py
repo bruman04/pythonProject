@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from form import CreateItemForm, CreateLoanForm
-from werkzeug.datastructures import ImmutableMultiDict
 import os
+import shelve
+
+from PIL import Image
+from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.datastructures import ImmutableMultiDict
+
 import Item
 import Loan
-import shelve
-from PIL import Image
-from Chat import *
 from Review import *
 
 # Ensure WTForms is v2.3.3 (Otherwise it won't work)
@@ -138,14 +138,13 @@ def update_item(id):
         item.set_location(update_item_form.location.data)
         imageName = str(id)
         request.files['image'].save(os.path.join('static/images', f"{imageName}1.png"))
-        img =os.stat(os.path.join('static/images', f"{imageName}1.png")).st_size
+        img = os.stat(os.path.join('static/images', f"{imageName}1.png")).st_size
         if img == 0:
-          os.remove(os.path.join('static/images', f"{imageName}1.png"))
+            os.remove(os.path.join('static/images', f"{imageName}1.png"))
         else:
-          im = Image.open(request.files['image'])
-          im = im.save(os.path.join('static/images', f"{imageName}.png"))
-          os.remove(os.path.join('static/images', f"{imageName}1.png"))
-
+            im = Image.open(request.files['image'])
+            im = im.save(os.path.join('static/images', f"{imageName}.png"))
+            os.remove(os.path.join('static/images', f"{imageName}1.png"))
 
         db['Items'] = items_dict
         db.close()
@@ -182,7 +181,6 @@ def delete_item(id):
 
     except IndexError:
         print("Error in retreiving items")
-
 
     # delete image from static
     os.remove(f'static/images/{id}.png')
