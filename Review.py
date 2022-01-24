@@ -1,3 +1,5 @@
+from typing import List, Set, Tuple
+
 from Chat import *
 
 
@@ -107,13 +109,13 @@ class Feedback(Chat):
         self.product_id: str = self.customer_id
 
     def getLastReviewObject(self) -> Review:
-        C: list[Review] = self.getFeedback()
+        C: List[Review] = self.getFeedback()
         return C[-1] if C else Review().delete()
 
     def getReviewsCount(self) -> int:
         return len(self.getFeedback())
 
-    def getFeedbacksByVendorID(self, vendor_id: str) -> set[str]:
+    def getFeedbacksByVendorID(self, vendor_id: str) -> Set[str]:
         """
         This method returns a vendor's set of product_id(s) for reviews and feedback only.
         This does not necessarily return all of a vendor's products.
@@ -130,7 +132,7 @@ class Feedback(Chat):
         reviewdb.close()
         return reviews
 
-    def getFeedback(self) -> list[Review]:
+    def getFeedback(self) -> List[Review]:
         reviewdb = open(self.db, 'c')
         if self.chatKey in reviewdb:
             feedback = reviewdb[self.chatKey]
@@ -139,7 +141,7 @@ class Feedback(Chat):
         reviewdb.close()
         return feedback
 
-    def setFeedback(self, feedback: list[Review]) -> bool:
+    def setFeedback(self, feedback: List[Review]) -> bool:
         reviewdb = open(self.db, 'c')
         try:
             reviewdb[self.chatKey] = feedback
@@ -164,14 +166,14 @@ class Feedback(Chat):
             reviewdb.close()
         return True
 
-    def appendMultiFeedback(self, reviewObjects: list[Review]) -> bool:
+    def appendMultiFeedback(self, reviewObjects: List[Review]) -> bool:
         return self.setFeedback(self.getFeedback() + [
             r for r in reviewObjects if r.review.strip() and 1 <= r.stars <= 5 and isinstance(r.stars, int)
         ])
 
     def appendFeedbackReview(self, user_id: str, review: str, stars: int, utcTimezone: int = 8) -> bool:
         if review.strip() and 1 <= stars <= 5:
-            c: list[Review] = self.getFeedback()
+            c: List[Review] = self.getFeedback()
             c.append(Review(
                 sender_id=user_id,  # Unlike chat, anyone can add a feedback or review.
                 review=review.strip(),
@@ -184,7 +186,7 @@ class Feedback(Chat):
     def insertFeedbackReview(self, message_index: int, user_id: str, review: str, stars: int,
                              utcTimezone: int = 8) -> bool:
         if review.strip() and 1 <= stars <= 5:
-            c: list[Review] = self.getFeedback()
+            c: List[Review] = self.getFeedback()
             c.insert(message_index + 1, Review(
                 sender_id=user_id,  # Unlike chat, anyone can place a feedback or review.
                 review=review.strip(),
@@ -197,7 +199,7 @@ class Feedback(Chat):
     def replyFeedbackReview(self, replying_message_index: int, replyer_id: str, reply: str, stars: int,
                             utcTimezone: int = 8) -> bool:
         if reply.strip() and 1 <= stars <= 5:
-            c: list[Review] = self.getFeedback()
+            c: List[Review] = self.getFeedback()
             try:
                 c.insert(replying_message_index + 1, c[replying_message_index].reply(
                     replyer_id=replyer_id,  # Unlike chat, anyone can reply a feedback or review.
@@ -212,7 +214,7 @@ class Feedback(Chat):
 
     def editFeedbackReview(self, review_index: int, new_review: str, new_stars: int) -> bool:
         if new_review.strip() and 1 <= new_stars <= 5:
-            c: list[Review] = self.getFeedback()
+            c: List[Review] = self.getFeedback()
             try:
                 c[review_index] = c[review_index].edit(new_review.strip(), new_stars)
             except IndexError:
@@ -222,7 +224,7 @@ class Feedback(Chat):
 
     def editFeedbackReviewMessage(self, review_index: int, new_review: str) -> bool:
         if new_review.strip():
-            c: list[Review] = self.getFeedback()
+            c: List[Review] = self.getFeedback()
             try:
                 c[review_index] = c[review_index].editReview(new_review.strip())
             except IndexError:
@@ -232,7 +234,7 @@ class Feedback(Chat):
 
     def editFeedbackReviewStars(self, review_index: int, new_stars: int) -> bool:
         if 1 <= new_stars <= 5:
-            c: list[Review] = self.getFeedback()
+            c: List[Review] = self.getFeedback()
             try:
                 c[review_index] = c[review_index].editStars(new_stars)
             except IndexError:
@@ -241,7 +243,7 @@ class Feedback(Chat):
         return self.delFeedbackReview(review_index)
 
     def delFeedbackReview(self, review_index: int) -> bool:
-        C: list[Review] = self.getFeedback()
+        C: List[Review] = self.getFeedback()
         try:
             del C[review_index]
         except IndexError:
@@ -249,7 +251,7 @@ class Feedback(Chat):
         return self.setFeedback(C)
 
     def getOverallRating(self) -> float:
-        fb: tuple[int] = tuple(r.rating() for r in self.getFeedback())
+        fb: Tuple[int] = tuple(r.rating() for r in self.getFeedback())
         try:
             overallRating: float = sum(fb) / len(fb)
         except ZeroDivisionError:

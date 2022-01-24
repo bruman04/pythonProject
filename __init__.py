@@ -1,11 +1,12 @@
-import os
-import shelve
-
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
+from form import CreateItemForm, CreateLoanForm
 from werkzeug.datastructures import ImmutableMultiDict
-
+import os
 import Item
 import Loan
+import shelve
+from PIL import Image
+from Chat import *
 from Review import *
 
 # Ensure WTForms is v2.3.3 (Otherwise it won't work)
@@ -126,15 +127,25 @@ def update_item(id):
 
         item = items_dict.get(id)
         item.set_image(update_item_form.image.data)
-        request.files['image'].save(
-            os.path.join('static/images', f"{item.get_id()}.png")
-        )
+        # request.files['image'].save(
+        #     os.path.join('static/images', f"{item.get_id()}.png")
+        # )
         item.set_name(update_item_form.name.data)
         item.set_description(update_item_form.description.data)
         item.set_rate(update_item_form.rate.data)
         item.set_on_loan(update_item_form.on_loan.data)
         item.set_available(update_item_form.available.data)
         item.set_location(update_item_form.location.data)
+        imageName = str(id)
+        request.files['image'].save(os.path.join('static/images', f"{imageName}1.png"))
+        img =os.stat(os.path.join('static/images', f"{imageName}1.png")).st_size
+        if img == 0:
+          os.remove(os.path.join('static/images', f"{imageName}1.png"))
+        else:
+          im = Image.open(request.files['image'])
+          im = im.save(os.path.join('static/images', f"{imageName}.png"))
+          os.remove(os.path.join('static/images', f"{imageName}1.png"))
+
 
         db['Items'] = items_dict
         db.close()
@@ -148,12 +159,7 @@ def update_item(id):
         db = shelve.open('items.db', 'r')
         items_dict = db['Items']
         item = items_dict.get(id)
-        # items_list.append(item)
         update_item_form.image.data = item.get_image()
-        print(update_item_form.image.data)
-        # request.files['image'].save(
-        #     os.path.join('static/images', f"{item.get_id()}.png")
-        # )
         update_item_form.name.data = item.get_name()
         update_item_form.description.data = item.get_description()
         update_item_form.rate.data = item.get_rate()
@@ -177,7 +183,7 @@ def delete_item(id):
     except IndexError:
         print("Error in retreiving items")
 
-    # delete image from static
+
     # delete image from static
     os.remove(f'static/images/{id}.png')
 

@@ -4,6 +4,8 @@ from time import time_ns
 
 
 # Done by Ng Rong Kai:
+from typing import List, Set
+
 
 class Message:
     def __init__(
@@ -80,7 +82,7 @@ class Chat:
             i += 1
         return i
 
-    def getChatsByID(self, _id: str) -> set[str]:
+    def getChatsByID(self, _id: str) -> Set[str]:
         chats: set = set()
         chatdb = open(self.db, 'c')
         for k in chatdb:
@@ -93,7 +95,7 @@ class Chat:
         chatdb.close()
         return chats
 
-    def getChat(self) -> list[Message]:
+    def getChat(self) -> List[Message]:
         chatdb = open(self.db, 'c')
         if self.chatKey in chatdb:
             chat = chatdb[self.chatKey]
@@ -102,7 +104,7 @@ class Chat:
         chatdb.close()
         return chat
 
-    def setChat(self, chat: list[Message]) -> bool:
+    def setChat(self, chat: List[Message]) -> bool:
         chatdb = open(self.db, 'c')
         try:
             chatdb[self.chatKey] = chat
@@ -127,7 +129,7 @@ class Chat:
             chatdb.close()
         return True
 
-    def appendMultiChat(self, messageObjects: list[Message]) -> bool:
+    def appendMultiChat(self, messageObjects: List[Message]) -> bool:
         return self.setChat(self.getChat() + [m for m in messageObjects if m.msg().strip()])
 
     def appendChatMessage(self, asVendor: bool, message: str, utcTimezone: int = 8) -> bool:
