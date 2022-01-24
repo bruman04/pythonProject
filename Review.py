@@ -58,19 +58,19 @@ class Review(Message):
         html: str = f"""
         <div class="stars{starIndex}" id="stars{starIndex}" style="margin: 0; padding: 0; box-sizing: border-box; float: left; text-align: left;">
             <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="5{starIndex}" disabled value="5">
-            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*5*/ margin: 0 5px; content: '★';" for="5{starIndex}">★</label>
+            <label id="star5_{starIndex}" onclick="feedback(event, {starIndex}, this, true); document.getElementById("star5_{starIndex}").style.color = 'lightgrey'; this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*5*/ margin: 0 5px; content: '★';" for="5{starIndex}">★</label>
             
             <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="4{starIndex}" disabled value="4">
-            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*4*/ margin: 0 5px; content: '★';" for="4{starIndex}">★</label>
+            <label onclick="feedback(event, {starIndex}, this, true); document.getElementById("star5_{starIndex}").style.color = 'lightgrey'; this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*4*/ margin: 0 5px; content: '★';" for="4{starIndex}">★</label>
             
             <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="3{starIndex}" disabled value="3">
-            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*3*/ margin: 0 5px; content: '★';" for="3{starIndex}">★</label>
+            <label onclick="feedback(event, {starIndex}, this, true); document.getElementById("star5_{starIndex}").style.color = 'lightgrey'; this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*3*/ margin: 0 5px; content: '★';" for="3{starIndex}">★</label>
             
             <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="2{starIndex}" disabled value="2">
-            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*2*/ margin: 0 5px; content: '★';" for="2{starIndex}">★</label>
+            <label onclick="feedback(event, {starIndex}, this, true); document.getElementById("star5_{starIndex}").style.color = 'lightgrey'; this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*2*/ margin: 0 5px; content: '★';" for="2{starIndex}">★</label>
             
             <input class="stars{starIndex}" style="display: none;" type="radio" name="stars{starIndex}" id="1{starIndex}" disabled value="1">
-            <label onclick="feedback(event, {starIndex}, this, true); this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*1*/ margin: 0 5px; content: '★';" for="1{starIndex}">★</label>
+            <label onclick="feedback(event, {starIndex}, this, true); document.getElementById("star5_{starIndex}").style.color = 'lightgrey'; this.style.color = 'gold';" class="stars{starIndex}" style="float: right; font-size: 20px; color: gold;/*1*/ margin: 0 5px; content: '★';" for="1{starIndex}">★</label>
         </div>""".replace(f' disabled value="{self.rating()}">', f' value="{self.rating()}" checked>') \
             .replace(" disabled", " disabled" if disabled else '').strip().replace('\n', '').replace('\t', '')
 

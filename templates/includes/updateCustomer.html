@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Update Customer{% endblock %}
+
+{% block content %}
+{% from "includes/formHelper.html" import render_field %}
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='updateCustomer.css') }}">
+</head>
+
+<form method="POST" action="" class="form-container">
+  <h1 class="display-4">Update Account</h1>
+<hr>
+<br>
+  <div class="form-group">
+    {{ render_field(prefill_form.username, class="form-control") }}
+  </div>
+  <br>
+  <div class="form-group">
+    {{ render_field(prefill_form.email, class="form-control") }}
+  </div>
+  <br>
+  <div class="form-group hiding">
+    {{ render_field(prefill_form.string_password, class="form-control") }}
+  </div>
+  <div class="form-group hiding">
+    {{ render_field(prefill_form.string_email, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(prefill_form.password_confirm, class="form-control") }}
+  </div>
+  <br>
+  <div class="form-group">
+    {{ render_field(prefill_form.password, class="form-control") }}
+  </div>
+  <br>
+  <div class="form-group">
+    {{ render_field(prefill_form.old_password, class="form-control") }}
+  </div>
+  <br>
+  <br>
+  <input type="submit" value="Edit Account" class="btn bg-info btn-dark"/>
+  <br>
+  <br>
+  <a href="/retrieveUsers"><input type="button" value="Cancel" class="btn btn-danger" id="cancelbutton"/></a>
+</form>
+
+{% endblock %}
