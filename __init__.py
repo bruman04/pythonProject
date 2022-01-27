@@ -32,10 +32,10 @@ def listingpage():
     # retrieve items from database
 
     items_dict = {}
-    db = shelve.open('items.db', 'c')
+    db = shelve.open("items.db", 'c')
 
     try:
-        items_dict = db['Items']
+        items_dict = db["Items"]
 
     except IndexError:
         print("Error in retrieving items")
@@ -47,7 +47,7 @@ def listingpage():
         item = items_dict.get(key)
         items_list.append(item)
 
-    return render_template('listingpage.html', items_list=items_list)
+    return render_template("listingpage.html", items_list=items_list)
 
 
 # Done by Ng Rong Kai:
