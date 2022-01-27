@@ -36,7 +36,7 @@
         <tr>
             <td>{{ chat[0] }}</td>
             <td>{{ chat[1].id() }}{{ ': ' if chat[1].id() else '-' }}{{ chat[1].msg() }}</td>
-            <td>{{ chat[2] }}</td>
+            <td style="color: {{ 'red' if chat[2] > 0 else 'green' }}; font-size: 14pt;"><b>{{ chat[2] }}</b></td>
             <td><a href="/{{ 'vendor' if asVendor else 'customer' }}/chats/{{ me }}/{{ chat[0] }}" class="btn btn-info">
                 Chat</a></td>
             <td>
