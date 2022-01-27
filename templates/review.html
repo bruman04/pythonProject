@@ -90,8 +90,22 @@
           style="border-radius: 16px; position: absolute; bottom: 0; width: 95%; height: auto; margin-left: 35vh; margin-right: 15vh; overflow-x: hidden;">
         <table class="table table-lg" style="border-radius: 16px; width: 100%; margin-left: auto; margin-right: auto;">
             <tr>
+                <th rowspan="2">
+                    <textarea name="text" autocomplete="off" required form="review" class="form-control" id="text"
+                              autofocus draggable="false"
+                              style="border-radius: 16px; resize: none; height: 100px; width: 100%; font-size: 14pt;"
+                              placeholder="Review Vendor @{{ you }} ..."></textarea>
+                </th>
                 <th>
-                    <div class="stars">
+                    <button type="submit" class="btn btn-primary" value="Send"
+                            style="border-radius: 16px; margin-left: 25px; height: 50px; width: auto; font-size: 14pt; text-align: center; margin-bottom: 0;">
+                        Send
+                    </button>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="stars" style="margin-top: 0;">
                         <input type="radio" id="5" name="stars" value="5">
                         <label for="5"></label>
 
@@ -107,20 +121,6 @@
                         <input type="radio" id="1" name="stars" value="1">
                         <label for="1"></label>
                     </div>
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <textarea name="text" autocomplete="off" required form="review" class="form-control" id="text"
-                              autofocus draggable="false"
-                              style="border-radius: 16px; resize: none; height: 100px; width: 100%; font-size: 14pt;"
-                              placeholder="Review Vendor @{{ you }} ..."></textarea>
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-primary" value="Send"
-                            style="border-radius: 16px; margin-top: 25px; height: 50px; width: auto; font-size: 14pt; text-align: center;">
-                        Send
-                    </button>
                 </td>
             </tr>
         </table>
