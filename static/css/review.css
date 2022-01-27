@@ -90,3 +90,7 @@
   border-radius: 5vh;
   opacity: 0.9;
 }
+
+table, td, th, tr {
+  border: none !important;
+}
