@@ -1,4 +1,4 @@
-// Done by Ng Rong Kai:
+// This is for chat, message, review, and feedback features:
 
 if (window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
@@ -88,4 +88,4 @@ window.addEventListener("load", function() {
     });
 });
 
-// Done by Ng Rong Kai.
+// This is for chat, message, review, and feedback features.

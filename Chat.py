@@ -3,7 +3,7 @@ from shelve import open
 from time import time_ns
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 from typing import List, Set
 
 
@@ -62,7 +62,7 @@ class Message:
         return self.msg()
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 class Chat:
     def __init__(self, customer_id: str = '', vendor_id: str = '', db: str = "chat.db"):
@@ -161,4 +161,4 @@ class Chat:
             return False
         return self.setChat(C)
 
-# Done by Ng Rong Kai.
+# This is for chat, message, review, and feedback features.

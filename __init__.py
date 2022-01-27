@@ -53,7 +53,7 @@ def listingpage():
     return render_template("listingpage.html", items_list=items_list)
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 @app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews", methods=["GET", "POST"])
 def review(USER: str, VENDOR: str, PRODUCT: str):
@@ -72,7 +72,7 @@ def review(USER: str, VENDOR: str, PRODUCT: str):
     return render_template("review.html", me=USER.strip(), you=VENDOR.strip(), product=PRODUCT.strip(), feedback=r)
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 @app.route("/<string:USER>/<string:VENDOR>/<string:PRODUCT>/reviews/edit", methods=["POST"])
 def edit_review(USER: str, VENDOR: str, PRODUCT: str):
@@ -357,7 +357,7 @@ def move_to_current(id):
     return render_template('futureloans.html')
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 @app.route("/<string:TYPE>/chats/<string:ID>", methods=["GET"])
 def chats(TYPE: str, ID: str):
@@ -370,7 +370,7 @@ def chats(TYPE: str, ID: str):
     return render_template("chats.html", count=len(__chats), chats_list=__chats, asVendor=TYPE, me=ID)
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 @app.route("/<string:TYPE>/chats/<string:MY_ID>/<string:YOUR_ID>", methods=["GET", "POST"])
 def chat(TYPE: str, MY_ID: str, YOUR_ID: str):
@@ -385,7 +385,7 @@ def chat(TYPE: str, MY_ID: str, YOUR_ID: str):
     return render_template("chat.html", asVendor=TYPE, me=MY_ID, you=YOUR_ID, chat=c)
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 @app.route("/<string:TYPE>/chats/<string:MY_ID>/<string:YOUR_ID>/edit", methods=["POST"])
 def edit_chat(TYPE: str, MY_ID: str, YOUR_ID: str):
@@ -401,7 +401,7 @@ def edit_chat(TYPE: str, MY_ID: str, YOUR_ID: str):
     return '', 403
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 @app.route("/<string:TYPE>/deleteChat/<string:MY_ID>/<string:YOUR_ID>", methods=["POST"])
 def delete_chat(TYPE: str, MY_ID: str, YOUR_ID: str):
@@ -411,7 +411,7 @@ def delete_chat(TYPE: str, MY_ID: str, YOUR_ID: str):
     return '', 403
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 if __name__ == r"__main__":
     app.run(debug=True)

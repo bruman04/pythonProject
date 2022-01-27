@@ -1,9 +1,9 @@
-from typing import List, Set, Tuple
+from typing import Tuple
 
 from Chat import *
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 class Review(Message):
 
@@ -99,7 +99,7 @@ class Review(Message):
         return self.starsString() + '\n' + self.rvw()
 
 
-# Done by Ng Rong Kai:
+# This is for chat, message, review, and feedback features:
 
 class Feedback(Chat):
 
@@ -262,4 +262,4 @@ class Feedback(Chat):
             overallRating = 5.0
         return round(abs(overallRating), 2)
 
-# Done by Ng Rong Kai.
+# This is for chat, message, review, and feedback features.
