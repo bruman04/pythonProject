@@ -20,6 +20,9 @@ from form import CreateItemForm, CreateLoanForm
 app = Flask(__name__)
 
 
+# Zoom Link for Presentation:
+# https://nyp-sg.zoom.us/j/82625565538?pwd=VkErcVRSZlcyOTFuNXlDem8ySE9VZz09
+
 # 404 error page
 
 # @app.errorhandler(404)
