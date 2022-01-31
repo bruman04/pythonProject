@@ -1,5 +1,5 @@
-import os
 import shelve
+from os import system, remove, path, stat
 
 from PIL import Image
 from flask import Flask, render_template, request, redirect, url_for
@@ -11,7 +11,7 @@ from Review import *
 
 # Ensure WTForms is v2.3.3 (Otherwise it won't work)
 try:
-    os.system("pip install WTForms==2.3.3")
+    system("pip install WTForms==2.3.3")
 except:
     print("Error installing WTForms v2.3.3! Skipping.")
 
@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 
 # Zoom Link for Presentation:
-# https://nyp-sg.zoom.us/j/82625565538?pwd=VkErcVRSZlcyOTFuNXlDem8ySE9VZz09
+# https://nyp-sg.zoom.us/j/82625565538
 
 # 404 error page
 
@@ -131,7 +131,7 @@ def update_item(id):
         item = items_dict.get(id)
         item.set_image(update_item_form.image.data)
         # request.files['image'].save(
-        #     os.path.join('static/images', f"{item.get_id()}.png")
+        #     path.join('static/images', f"{item.get_id()}.png")
         # )
         item.set_name(update_item_form.name.data)
         item.set_description(update_item_form.description.data)
@@ -140,14 +140,14 @@ def update_item(id):
         item.set_available(update_item_form.available.data)
         item.set_location(update_item_form.location.data)
         imageName = str(id)
-        request.files['image'].save(os.path.join('static/images', f"{imageName}1.png"))
-        img = os.stat(os.path.join('static/images', f"{imageName}1.png")).st_size
+        request.files['image'].save(path.join('static/images', f"{imageName}1.png"))
+        img = stat(path.join('static/images', f"{imageName}1.png")).st_size
         if img == 0:
-            os.remove(os.path.join('static/images', f"{imageName}1.png"))
+            remove(path.join('static/images', f"{imageName}1.png"))
         else:
             im = Image.open(request.files['image'])
-            im = im.save(os.path.join('static/images', f"{imageName}.png"))
-            os.remove(os.path.join('static/images', f"{imageName}1.png"))
+            im = im.save(path.join('static/images', f"{imageName}.png"))
+            remove(path.join('static/images', f"{imageName}1.png"))
 
         db['Items'] = items_dict
         db.close()
@@ -186,7 +186,7 @@ def delete_item(id):
         print("Error in retreiving items")
 
     # delete image from static
-    os.remove(f'static/images/{id}.png')
+    remove(f'static/images/{id}.png')
 
     # delete selected item
 
@@ -238,7 +238,7 @@ def create_item():
 
         # save image to static
         request.files['image'].save(
-            os.path.join('static/images', f"{item.get_id()}.png")
+            path.join('static/images', f"{item.get_id()}.png")
         )
 
         return redirect(url_for('listingpage'))
