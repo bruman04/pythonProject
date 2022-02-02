@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Book Item{% endblock %}
+
+{% block content %}
+<style>
+    #pageHolder {
+        width: calc(100vw - 30px);
+        height: calc(100vh - 56px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    th {
+        padding: 0 60px;
+        text-align: center;
+        width: 250px
+    }
+
+    tr {
+        border: 1px solid black;
+    }
+
+    img {
+        max-width: 50%;
+        margin: 20px 0;
+    }
+
+    td {
+        width: 250px;
+        text-align: center;
+    }
+
+    tr > td:nth-child(1) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0;
+    }
+
+    .button {
+        color: white;
+        background-color: black;
+        width: 300px;
+        padding: 15px 0;
+        border: none;
+        margin: 50px 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .button:nth-child(1) {
+        background-color: blueviolet;
+    }
+
+    .button:hover {
+        text-decoration: none;
+        color: lightgrey;
+    }
+</style>
+<div id="pageHolder">
+    <h1 style="margin-bottom: 50px">Cart</h1>
+    <table id="table">
+        <tr>
+            <th>Product</th>
+            <th>Renting Date</th>
+            <th>Rate</th>
+            <th>Total</th>
+            <th>Remove</th>
+        </tr>
+    </table>
+    <span style="margin-top: 50px;">Total: $<span id="total"></span></span>
+    <div style="display: flex">
+        <a class="button" href="/">Continue Loaning</a>
+        <a class="button" href="/payment">Proceed to Payment</a>
+    </div>
+    <script>
+        const table = document.getElementById("table");
+
+        // Create cart if it doesn't exist
+        let cart = localStorage.getItem("cart")
+        if (!cart) { cart = "[]"; }
+        cart = JSON.parse(cart);
+
+        let total = 0;
+
+        cart.forEach((item, i) => {
+
+            let start = new Date(item.start),
+                end   = new Date(item.end);
+
+            let days = end.getDate() - start.getDate()
+
+            total += days*item.rate;
+
+            table.innerHTML += `
+            <tr>
+                <td><img src="/static/images/${item.id}.png" />${item.name}</td>
+                <td>${start.toLocaleDateString("en-GB")} - ${end.toLocaleDateString("en-GB")}</td>
+                <td>$${item.rate}/Day</td>
+                <td>$${days*item.rate}</td>
+                <td>
+                    <button type="submit" value="Delete" class="btn btn-danger" onclick="removeFromCart(${i})">
+                        <svg style="width: 20px; height: 20px; margin-top: -3px" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+            `
+        });
+
+        document.getElementById("total").innerHTML = total
+
+
+        function removeFromCart(index) {
+            cart.splice(index, 1)
+            localStorage.setItem("cart", JSON.stringify(cart));
+            location.reload();
+        }
+
+
+    </script>
+</div>
+{% endblock %}

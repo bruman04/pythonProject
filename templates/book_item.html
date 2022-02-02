@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Book Item{% endblock %}
+
+{% block content %}
+<style>
+    #pageHolder {
+        width: calc(100vw - 30px);
+        height: calc(100vh - 56px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    img {
+        width: 30%
+    }
+
+    #infoHolder {
+        margin: 0 10vw;
+        width: min(30vw, 500px);
+        text-align: center;
+    }
+
+    #infoHolder > hr {
+        margin: 40px 0;
+    }
+
+    .button {
+        color: white;
+        background-color: black;
+        width: 300px;
+        padding: 15px 0;
+        border: none;
+        margin: 50px 20px;
+        border-radius: 5px;
+    }
+
+    .button:nth-child(1) {
+        background-color: blueviolet;
+    }
+
+    .button:hover {
+        text-decoration: none;
+        color: lightgrey;
+    }
+
+</style>
+<div id="pageHolder">
+    <img src="/static/images/{{ item.get_id() }}.png" />
+    <div id="infoHolder">
+
+        <span>{{ item.get_name() }}</span>
+        <hr />
+        <span>Loaning Price: ${{ item.get_rate() }}/Day</span>
+        <hr />
+        <span>{{ item.get_description() }}</span>
+        <div style="display: flex">
+            <a class="button" href="">Chat Now</a>
+            <a class="button" href="/book/{{ item.get_id() }}/date">Set a Date</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

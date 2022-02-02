@@ -8,6 +8,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 import Item
 import Loan
 from Review import *
+from routes.booking import bookings
 
 # Ensure WTForms is v2.3.3 (Otherwise it won't work)
 try:
@@ -18,6 +19,7 @@ except:
 from form import CreateItemForm, CreateLoanForm
 
 app = Flask(__name__)
+app.register_blueprint(bookings, url_prefix="/book")
 
 
 # Zoom Link for Presentation:
@@ -28,6 +30,10 @@ app = Flask(__name__)
 # @app.errorhandler(404)
 # def error404(e):
 #     return render_template('error404.html'),404
+
+@app.route('/cart')
+def cart():
+    return render_template("cart.html")
 
 # main page
 @app.route('/')
