@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Book Item{% endblock %}
+
+{% block content %}
+<style>
+    #holder {
+        width: calc(100vw - 30px);
+        height: calc(100vh - 56px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #datepicker > div {
+        transform: scale(1.5);
+    }
+
+    #contentHolder {
+        display: flex;
+        margin-top: 100px;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #contentHolder >span {
+        font-size: 20px;
+    }
+
+    .button {
+        color: white;
+        background-color: blueviolet;
+        width: 300px;
+        padding: 15px 0;
+        border: none;
+        margin: 50px 20px;
+        border-radius: 5px;
+    }
+
+    .button:hover {
+        text-decoration: none;
+        color: lightgrey;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+<div id="holder">
+    <div id="datepicker"></div>
+    <div id="contentHolder">
+        <span>Date Selected:<br /><span id="dateRange">No Date Selected</span></span>
+        <button class="button" onclick="addToCart()">Add to Cart</button>
+    </div>
+</div>
+<script>
+
+    const dateRange = document.getElementById("dateRange");
+
+    let date1Selected = new Date(),
+        date2Selected = new Date();
+
+    const picker = new Litepicker({ 
+        element: document.getElementById('datepicker'),
+        inlineMode: true,
+        singleMode: false,
+        numberOfMonths: 2,
+        numberOfColumns: 2
+    });
+
+    picker.on('selected', (date1, date2) => {
+        date1Selected = date1.dateInstance;
+        date2Selected = date2.dateInstance;
+        dateRange.innerHTML = `${date1.dateInstance.toLocaleDateString("en-GB")} - ${date2.dateInstance.toLocaleDateString("en-GB")}`
+    });
+
+    function addToCart() {
+
+        // Create cart if it doesn't exist
+        let cart = localStorage.getItem("cart")
+        if (!cart) { cart = "[]"; }
+        cart = JSON.parse(cart);
+
+        cart.push({
+            id: "{{ item.get_id() }}",
+            name: "{{ item.get_name() }}",
+            rate: {{ item.get_rate() }},
+            start: date1Selected.getTime(),
+            end: date2Selected.getTime()
+        });
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        location.href = "/cart";
+    }
+</script>
+
+{% endblock %}

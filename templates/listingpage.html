@@ -10,11 +10,12 @@
 
     <div class="card-deck">
         {%for item in items_list%}
-        <div class="card d-flex position-relative" style="width: 25rem;">
+        <div class="card d-flex position-relative" style="width: 25rem;" onclick="location.href = '/book/{{ item.get_id() }}'">
             <div id="listing">
                 <img src="{{url_for('static', filename='images/'~item.get_id()~'.png')}}" alt="{{item.get_name()}}"
                      id="listingImage" class="card-img-top w-100">
                 <div id="listingInfo">
+
                     <p>Item ID: {{item.get_id()}}</p>
                     <p class="card-title">Item Name: {{item.get_name()}}</p>
                     <div class="card-body">
@@ -40,10 +41,10 @@
                     </div>
                 </div>
             </div>
-            {%endfor%}
-
-
         </div>
+        {%endfor%}
+
+
     </div>
 
 </div>
